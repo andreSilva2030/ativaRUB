@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Divisão/Bandeira{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Editar Divisão/Bandeira</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="nome_bandeira" class="form-label">Nome da Bandeira *</label>
+                <input type="text" class="form-control" id="nome_bandeira" name="nome_bandeira" 
+                       value="{{ divisao.nome_bandeira }}" required maxlength="255">
+            </div>
+            
+            <div class="mb-3">
+                <label for="contato" class="form-label">Contato</label>
+                <input type="text" class="form-control" id="contato" name="contato" 
+                       value="{{ divisao.contato or '' }}" maxlength="255">
+            </div>
+            
+            <div class="mb-3">
+                <p class="text-muted">
+                    <strong>ID:</strong> {{ divisao.id_bandeira_divisao }}<br>
+                    <strong>Criado em:</strong> {{ divisao.created_at.strftime('%d/%m/%Y %H:%M') }}<br>
+                    <strong>Última atualização:</strong> {{ divisao.updated_at.strftime('%d/%m/%Y %H:%M') }}
+                </p>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('divisao_bandeira.index') }}" class="btn btn-secondary">
+                    Voltar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    Atualizar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

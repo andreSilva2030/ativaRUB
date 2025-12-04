@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+.env
+
+# Byte-compiled / cache
+__pycache__/
+*.pyc
+
+# Migrations (se quiser versionar, remova esta linha)
+migrations/
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store

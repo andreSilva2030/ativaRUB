@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Divisões/Bandeiras{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Divisões/Bandeiras</h1>
+    <a href="{{ url_for('divisao_bandeira.create') }}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Nova Divisão/Bandeira
+    </a>
+</div>
+
+{% if divisoes %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Contato</th>
+                <th>Lojas Vinculadas</th>
+                <th>Criado em</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for divisao in divisoes %}
+            <tr>
+                <td>{{ divisao.id_bandeira_divisao }}</td>
+                <td>
+                    <a href="{{ url_for('divisao_bandeira.show', id=divisao.id_bandeira_divisao) }}">
+                        {{ divisao.nome_bandeira }}
+                    </a>
+                </td>
+                <td>{{ divisao.contato or '-' }}</td>
+                <td>
+                    <span class="badge bg-primary">{{ divisao.lojas|length }}</span>
+                </td>
+                <td>{{ divisao.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{{ url_for('divisao_bandeira.edit', id=divisao.id_bandeira_divisao) }}" 
+                           class="btn btn-warning" title="Editar">
+                            Editar
+                        </a>
+                        <button type="button" class="btn btn-danger" 
+                                onclick="confirmDelete({{ divisao.id_bandeira_divisao }})"
+                                {% if divisao.lojas %}disabled title="Não pode excluir pois tem lojas vinculadas"{% endif %}>
+                            Excluir
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+    Nenhuma divisão/bandeira cadastrada. <a href="{{ url_for('divisao_bandeira.create') }}">Clique aqui</a> para criar a primeira.
+</div>
+{% endif %}
+
+<form id="delete-form" method="POST" style="display: none;">
+    <!-- Formulário para exclusão -->
+</form>
+
+<script>
+function confirmDelete(id) {
+    if (confirm('Tem certeza que deseja excluir esta divisão/bandeira?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/divisao_bandeira/${id}/delete`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Divisão/Bandeira{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Nova Divisão/Bandeira</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="nome_bandeira" class="form-label">Nome da Bandeira *</label>
+                <input type="text" class="form-control" id="nome_bandeira" name="nome_bandeira" 
+                       required maxlength="255" placeholder="Ex: Hipermercado Nacional">
+                <div class="form-text">Nome único que identifica a divisão/bandeira.</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="contato" class="form-label">Contato</label>
+                <input type="text" class="form-control" id="contato" name="contato" 
+                       maxlength="255" placeholder="Ex: email@bandeira.com">
+                <div class="form-text">Email ou telefone para contato.</div>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('divisao_bandeira.index') }}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
