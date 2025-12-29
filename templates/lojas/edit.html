@@ -1,31 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Cadastrar Nova Loja</h2>
+<h2>Editar Loja</h2>
 
 <form method="POST">
     <div class="mb-3">
         <label for="nome_loja" class="form-label">Nome da Loja *</label>
-        <input type="text" class="form-control" id="nome_loja" name="nome_loja" required>
+        <input type="text" class="form-control" id="nome_loja" name="nome_loja" value="{{ loja.nome_loja }}" required>
     </div>
     <div class="mb-3">
         <label for="endereco" class="form-label">Endereço</label>
-        <textarea class="form-control" id="endereco" name="endereco"></textarea>
+        <textarea class="form-control" id="endereco" name="endereco">{{ loja.endereco }}</textarea>
     </div>
     <div class="mb-3">
         <label for="qtd_sku" class="form-label">Quantidade de SKU</label>
-        <input type="number" class="form-control" id="qtd_sku" name="qtd_sku" min="0" value="0">
+        <input type="number" class="form-control" id="qtd_sku" name="qtd_sku" min="0" value="{{ loja.qtd_sku }}">
     </div>
     <div class="mb-3">
         <label for="qtd_pessoas" class="form-label">Quantidade de Pessoas</label>
-        <input type="number" class="form-control" id="qtd_pessoas" name="qtd_pessoas" min="0" value="0" required>
+        <input type="number" class="form-control" id="qtd_pessoas" name="qtd_pessoas" min="0" value="{{ loja.qtd_pessoas }}" required>
     </div>
     <div class="mb-3">
         <label for="id_divisao_bandeira" class="form-label">Divisão/Bandeira *</label>
         <select class="form-select" id="id_divisao_bandeira" name="id_divisao_bandeira" required>
-            <option value="">Selecione...</option>
             {% for divisao in divisoes %}
-                <option value="{{ divisao.id_bandeira_divisao }}">{{ divisao.nome_bandeira }}</option>
+                <option value="{{ divisao.id_bandeira_divisao }}" {% if divisao.id_bandeira_divisao == loja.id_divisao_bandeira %}selected{% endif %}>
+                    {{ divisao.nome_bandeira }}
+                </option>
             {% endfor %}
         </select>
     </div>
@@ -34,13 +35,13 @@
         <select class="form-select" id="id_grupo_trabalho" name="id_grupo_trabalho">
             <option value="">Nenhum</option>
             {% for grupo in grupos %}
-                <option value="{{ grupo.id_grupo_trabalho }}">
+                <option value="{{ grupo.id_grupo_trabalho }}" {% if grupo.id_grupo_trabalho == loja.id_grupo_trabalho %}selected{% endif %}>
                     Grupo {{ grupo.id_grupo_trabalho }} ({{ grupo.nome_grupo }})
                 </option>
             {% endfor %}
         </select>
     </div>
-    <button type="submit" class="btn btn-success">Cadastrar</button>
+    <button type="submit" class="btn btn-success">Salvar</button>
     <a href="{{ url_for('lojas.index') }}" class="btn btn-secondary">Cancelar</a>
 </form>
 {% endblock %}

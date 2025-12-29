@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Cadastrar Nova Atividade</h2>
+
+<form method="POST" action="{{ url_for('atividade.nova_atividade') }}">
+
+    <!-- Título -->
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input
+            type="text"
+            class="form-control"
+            id="titulo"
+            name="titulo"
+            value="{{ request.form.titulo if request.method == 'POST' else '' }}"
+            required
+        >
+    </div>
+
+    <!-- Descrição -->
+    <div class="mb-3">
+        <label for="descricao" class="form-label">Descrição</label>
+        <textarea
+            class="form-control"
+            id="descricao"
+            name="descricao"
+            rows="3"
+        >{{ request.form.descricao if request.method == 'POST' else '' }}</textarea>
+    </div>
+
+    <!-- Ações -->
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">
+            Cadastrar
+        </button>
+        <a href="{{ url_for('atividade.listar_atividades') }}" class="btn btn-secondary">
+            Cancelar
+        </a>
+    </div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Editar Avanço de Atividade</h2>
+
+<form method="POST"
+      action="{{ url_for('checkpoint_atividade.update', id=registro.id_checkpoint_atividade) }}">
+
+    <!-- Atividade (somente leitura) -->
+    <div class="mb-3">
+        <label class="form-label">Atividade</label>
+        <input type="text"
+               class="form-control"
+               value="{{ registro.atividade.titulo }}"
+               disabled>
+    </div>
+
+    <!-- Loja (somente leitura) -->
+    <div class="mb-3">
+        <label class="form-label">Loja</label>
+        <input type="text"
+               class="form-control"
+               value="{{ registro.loja.nome_loja }}"
+               disabled>
+    </div>
+
+    <!-- Status -->
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+            <option value="Pendente"
+                {% if registro.status == 'Pendente' %}selected{% endif %}>
+                Pendente
+            </option>
+            <option value="Em andamento"
+                {% if registro.status == 'Em andamento' %}selected{% endif %}>
+                Em andamento
+            </option>
+            <option value="Concluído"
+                {% if registro.status == 'Concluído' %}selected{% endif %}>
+                Concluído
+            </option>
+        </select>
+    </div>
+
+    <!-- Datas -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Data Início</label>
+            <input type="datetime-local"
+                   name="data_ini"
+                   class="form-control"
+                   value="{{ registro.data_ini.strftime('%Y-%m-%dT%H:%M') if registro.data_ini }}">
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Data Fim</label>
+            <input type="datetime-local"
+                   name="data_fim"
+                   class="form-control"
+                   value="{{ registro.data_fim.strftime('%Y-%m-%dT%H:%M') if registro.data_fim }}">
+        </div>
+    </div>
+
+    <!-- Observação -->
+    <div class="mb-3">
+        <label class="form-label">Observação</label>
+        <textarea name="observacao"
+                  class="form-control"
+                  rows="3">{{ registro.observacao }}</textarea>
+    </div>
+
+    <!-- Ações -->
+    <div class="mt-4">
+        <button class="btn btn-success">
+            Salvar Alterações
+        </button>
+
+        <a href="{{ url_for('checkpoint_atividade.index') }}"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+    </div>
+
+</form>
+
+{% endblock %}

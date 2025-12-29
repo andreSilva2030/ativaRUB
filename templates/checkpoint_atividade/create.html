@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Novo Avanço de Atividade</h2>
+
+<form method="POST">
+
+<!-- Nome do Checkpoint -->
+<div class="mb-3">
+    <label class="form-label">Nome do Checkpoint *</label>
+    <input type="text"
+           name="nome_checkpoint"
+           class="form-control"
+           placeholder="Ex: Go-live Loja Sul - Fase 1"
+           required>
+    <div class="form-text">
+        Use um nome que identifique claramente o checkpoint.
+    </div>
+</div>
+
+<!-- Atividade -->
+<div class="mb-3">
+    <label class="form-label">Atividade *</label>
+    <select name="id_atividade" class="form-select" required>
+        <option value="">Selecione</option>
+        {% for a in atividades %}
+            <option value="{{ a.id_atividade }}">
+                {{ a.titulo }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+<!-- Lojas -->
+<div class="mb-3">
+    <label class="form-label">Lojas *</label>
+    <div class="row">
+        {% for loja in lojas %}
+        <div class="col-md-4 col-sm-6">
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       name="lojas[]"
+                       value="{{ loja.id_loja }}"
+                       id="loja_{{ loja.id_loja }}">
+                <label class="form-check-label"
+                       for="loja_{{ loja.id_loja }}">
+                    {{ loja.nome_loja }}
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Status -->
+<div class="mb-3">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-select">
+        <option value="Pendente">Pendente</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Concluído">Concluído</option>
+    </select>
+</div>
+
+<!-- Datas -->
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Data Início *</label>
+        <input type="datetime-local"
+               name="data_ini"
+               class="form-control"
+               required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Data Fim</label>
+        <input type="datetime-local"
+               name="data_fim"
+               class="form-control">
+    </div>
+</div>
+
+<!-- Observação -->
+<div class="mb-3">
+    <label class="form-label">Observação</label>
+    <textarea name="observacao"
+              class="form-control"
+              rows="3"
+              placeholder="Detalhes adicionais, impedimentos, observações..."></textarea>
+</div>
+
+<!-- Ações -->
+<div class="mt-4">
+    <button class="btn btn-success">
+        Salvar
+    </button>
+    <a href="{{ url_for('checkpoint_atividade.index') }}"
+       class="btn btn-secondary">
+        Cancelar
+    </a>
+</div>
+
+</form>
+
+{% endblock %}

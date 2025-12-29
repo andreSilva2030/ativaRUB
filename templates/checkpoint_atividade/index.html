@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Avanço de Atividades</h2>
+
+<div class="mb-3">
+    <a href="{{ url_for('checkpoint_atividade.create') }}"
+       class="btn btn-success">
+        Registrar Atividade
+    </a>
+</div>
+{% if registros %}
+{% set atual = namespace(nome=None) %}
+
+{% for ca in registros %}
+    {% if atual.nome != ca.nome_checkpoint %}
+        {% if not loop.first %}
+            </tbody>
+            </table>
+        {% endif %}
+
+        {% set atual.nome = ca.nome_checkpoint %}
+
+        <h4 class="mt-4">
+            Checkpoint:
+            <span class="text-muted">{{ ca.nome_checkpoint }}</span>
+        </h4>
+
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Atividade</th>
+                    <th>Loja</th>
+                    <th>Status</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Duração</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+    {% endif %}
+
+    <tr>
+        <td>{{ ca.atividade.titulo }}</td>
+        <td>{{ ca.loja.nome_loja }}</td>
+        <td>
+            {% if ca.status == 'Concluído' %}
+                <span class="badge bg-success">Concluído</span>
+            {% elif ca.status == 'Em andamento' %}
+                <span class="badge bg-warning text-dark">Em andamento</span>
+            {% else %}
+                <span class="badge bg-secondary">Pendente</span>
+            {% endif %}
+        </td>
+        <td>
+            {{ ca.data_ini.strftime('%d/%m/%Y %H:%M') if ca.data_ini else '-' }}
+        </td>
+        <td>
+            {{ ca.data_fim.strftime('%d/%m/%Y %H:%M') if ca.data_fim else '-' }}
+        </td>
+        <td>
+            {% if ca.data_ini and ca.data_fim %}
+                {{ ((ca.data_fim - ca.data_ini).total_seconds() / 3600) | round(2) }} h
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ url_for('checkpoint_atividade.edit', id=ca.id_checkpoint_atividade) }}"
+            class="btn btn-sm btn-warning">
+                Editar
+            </a>
+            <form method="POST"
+                action="{{ url_for('checkpoint_atividade.delete', id=ca.id_checkpoint_atividade) }}"
+                style="display:inline;"
+                onsubmit="return confirm('Confirma exclusão?');">
+                <button class="btn btn-sm btn-danger">
+                    Excluir
+                </button>
+            </form>
+        </td>
+    </tr>
+
+    {% if loop.last %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endfor %}
+{% else %} <p class="text-muted">
+Nenhuma atividade registrada. </p>
+{% endif %}
+
+{% endblock %}

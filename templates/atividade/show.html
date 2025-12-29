@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Detalhes da Atividade</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">{{ atividade.titulo }}</h4>
+
+```
+    <p class="card-text">
+        <strong>Descrição:</strong><br>
+        {{ atividade.descricao or '—' }}
+    </p>
+
+    <p class="card-text">
+        <strong>Criada em:</strong>
+        {{ atividade.created_at.strftime('%d/%m/%Y %H:%M') if atividade.created_at else '-' }}
+    </p>
+
+    <p class="card-text">
+        <strong>Última atualização:</strong>
+        {{ atividade.updated_at.strftime('%d/%m/%Y %H:%M') if atividade.updated_at else '-' }}
+    </p>
+</div>
+```
+
+</div>
+
+<div class="mb-3">
+    <a href="{{ url_for('atividade.listar_atividades') }}"
+       class="btn btn-secondary">
+        Voltar
+    </a>
+
+```
+<a href="{{ url_for('atividade.atualizar_atividade', id_atividade=atividade.id_atividade) }}"
+   class="btn btn-warning">
+    Editar
+</a>
+
+<form action="{{ url_for('atividade.excluir_atividade', id_atividade=atividade.id_atividade) }}"
+      method="POST"
+      style="display:inline;"
+      onsubmit="return confirm('Tem certeza que deseja excluir esta atividade?');">
+    <button type="submit" class="btn btn-danger">
+        Excluir
+    </button>
+</form>
+```
+
+</div>
+
+{% endblock %}

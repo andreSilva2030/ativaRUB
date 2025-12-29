@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Lista de Grupos de Trabalho</h1>
+
+    <!-- Botão para adicionar um novo grupo de trabalho -->
+    <div class="mb-3">
+        <a href="/grupos_trabalho/novo" class="btn btn-primary">Adicionar Grupo de Trabalho</a>
+    </div>
+
+    <!-- Verificar se há grupos de trabalho -->
+    {% if grupos_trabalho %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome do Grupo</th>
+                <th>Total de Pessoas</th>
+                <th>Responsável</th>
+                <th>Total de Lojas</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grupo in grupos_trabalho %}
+            <tr>
+                <td>{{ grupo.id_grupo_trabalho }}</td>
+                <td>{{ grupo.nome_grupo }}</td>
+                <td>{{ grupo.total_pessoas }}</td>
+                    {% if grupo.responsavel_nome %}
+                        {{ grupo.responsavel_nome }}
+                    {% else %}
+                        Não atribuído
+                    {% endif %}
+                </td>
+                <td>{{ grupo.total_lojas }}</td>
+                <td>
+                    <a href="/grupos_trabalho/{{ grupo.id_grupo_trabalho }}/editar" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="/grupos_trabalho/{{ grupo.id_grupo_trabalho }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este grupo de trabalho?');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Nenhum grupo de trabalho encontrado.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

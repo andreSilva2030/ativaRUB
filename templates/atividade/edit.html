@@ -1,0 +1,46 @@
+{% block content %}
+
+<h2>Editar Atividade</h2>
+
+<form method="POST" action="{{ url_for('atividade.editar_atividade', id_atividade=atividade.id_atividade) }}">
+
+```
+<!-- Título -->
+<div class="mb-3">
+    <label for="titulo" class="form-label">Título *</label>
+    <input
+        type="text"
+        class="form-control"
+        id="titulo"
+        name="titulo"
+        value="{{ atividade.titulo }}"
+        required
+    >
+</div>
+
+<!-- Descrição -->
+<div class="mb-3">
+    <label for="descricao" class="form-label">Descrição</label>
+    <textarea
+        class="form-control"
+        id="descricao"
+        name="descricao"
+        rows="4"
+    >{{ atividade.descricao or '' }}</textarea>
+</div>
+
+<!-- Ações -->
+<div class="mt-4">
+    <button type="submit" class="btn btn-success">
+        Salvar Alterações
+    </button>
+
+    <a href="{{ url_for('atividade.listar_atividades') }}"
+       class="btn btn-secondary">
+        Cancelar
+    </a>
+</div>
+```
+
+</form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Adicionar Novo Grupo de Trabalho</h1>
+
+    <!-- Formulário para criar um novo grupo de trabalho -->
+    <form action="/grupos_trabalho/" method="POST">
+        <div class="mb-3">
+            <label for="nome_grupo" class="form-label">Nome do Grupo</label>
+            <input type="text" class="form-control" id="nome_grupo" name="nome_grupo" placeholder="Digite o nome do grupo" required>
+        </div>
+        <div class="mb-3">
+            <label for="id_responsavel" class="form-label">Responsável</label>
+            <select class="form-select" id="id_responsavel" name="id_responsavel" required>
+                <option value="" disabled selected>Selecione um responsável</option>
+                {% for responsavel in responsaveis %}
+                <option value="{{ responsavel.id_responsavel }}">{{ responsavel.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="/grupos_trabalho/view" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

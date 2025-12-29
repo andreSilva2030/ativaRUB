@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lista de Atividades</h2>
+
+<a href="{{ url_for('atividade.nova_atividade') }}"
+   class="btn btn-primary mb-3">
+   Cadastrar Nova Atividade
+</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for atividade in atividades %}
+        <tr>
+            <td>{{ atividade.id_atividade }}</td>
+            <td>{{ atividade.titulo }}</td>
+            <td>{{ atividade.descricao }}</td>
+            <td>
+                <a href="{{ url_for('atividade.obter_atividade', id_atividade=atividade.id_atividade) }}"
+                   class="btn btn-info btn-sm">
+                   Detalhes
+                </a>
+
+                <a href="{{ url_for('atividade.editar_atividade', id_atividade=atividade.id_atividade) }}"
+                   class="btn btn-warning btn-sm">
+                   Editar
+                </a>
+
+                <form action="{{ url_for('atividade.excluir_atividade', id_atividade=atividade.id_atividade) }}"
+                      method="POST"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Deseja excluir esta atividade?')">
+                        Excluir
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not atividades %}
+<p class="text-muted">Nenhuma atividade cadastrada.</p>
+{% endif %}
+{% endblock %}
