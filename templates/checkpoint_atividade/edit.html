@@ -6,16 +6,6 @@
 
 <form method="POST"
       action="{{ url_for('checkpoint_atividade.update', id=registro.id_checkpoint_atividade) }}">
-
-    <!-- Atividade (somente leitura) -->
-    <div class="mb-3">
-        <label class="form-label">Atividade</label>
-        <input type="text"
-               class="form-control"
-               value="{{ registro.atividade.titulo }}"
-               disabled>
-    </div>
-
     <!-- Loja (somente leitura) -->
     <div class="mb-3">
         <label class="form-label">Loja</label>

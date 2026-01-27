@@ -30,7 +30,6 @@
         <table class="table table-striped table-hover align-middle">
             <thead>
                 <tr>
-                    <th>Atividade</th>
                     <th>Loja</th>
                     <th>Status</th>
                     <th>Início</th>
@@ -43,7 +42,6 @@
     {% endif %}
 
     <tr>
-        <td>{{ ca.atividade.titulo }}</td>
         <td>{{ ca.loja.nome_loja }}</td>
         <td>
             {% if ca.status == 'Concluído' %}

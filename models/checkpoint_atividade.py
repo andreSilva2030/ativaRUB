@@ -13,13 +13,6 @@ class CheckpointAtividade(db.Model):
         nullable=False
     )
 
-    # Foreign Keys
-    id_atividade = db.Column(
-        db.Integer,
-        db.ForeignKey('atividade.id_atividade'),
-        nullable=False
-    )
-
     id_loja = db.Column(
         db.Integer,
         db.ForeignKey('loja.id_loja'),
@@ -54,7 +47,6 @@ class CheckpointAtividade(db.Model):
     )
 
     # Relacionamentos
-    atividade = db.relationship('Atividade')
     loja = db.relationship('Loja')
     planejamento = db.relationship('Planejamento')
 
@@ -62,7 +54,6 @@ class CheckpointAtividade(db.Model):
         return (
             f'<CheckpointAtividade '
             f'CP:"{self.nome_checkpoint}" '
-            f'AT:{self.id_atividade} '
             f'LO:{self.id_loja} '
             f'ST:{self.status}>'
         )
@@ -83,8 +74,7 @@ class CheckpointAtividade(db.Model):
         """
         if self.data_ini and self.data_fim:
             return round(
-                (self.data_fim - self.data_ini).total_seconds() / 3600,
-                2
+                (self.data_fim - self.data_ini).total_seconds() / 3600, 2
             )
         return None
 
@@ -93,12 +83,6 @@ class CheckpointAtividade(db.Model):
             'id_checkpoint_atividade': self.id_checkpoint_atividade,
 
             'nome_checkpoint': self.nome_checkpoint,
-
-            'atividade': {
-                'id': self.atividade.id_atividade,
-                'titulo': self.atividade.titulo
-            } if self.atividade else None,
-
             'loja': {
                 'id': self.loja.id_loja,
                 'nome': self.loja.nome_loja

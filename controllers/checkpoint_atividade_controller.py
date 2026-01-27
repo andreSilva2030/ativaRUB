@@ -25,7 +25,6 @@ def index():
     """
     registros = (
         CheckpointAtividade.query
-        .join(CheckpointAtividade.atividade)
         .join(CheckpointAtividade.planejamento)
         .join(Planejamento.grupo_trabalho)
         .join(GrupoTrabalho.lojas)
@@ -44,13 +43,11 @@ def index():
 
 @bp.route('/create', methods=['GET', 'POST'])
 def create():
-    atividades = Atividade.query.order_by(Atividade.titulo).all()
     planejamentos = Planejamento.query.order_by(Planejamento.data_ini.desc()).all()
     grupos_trabalho = GrupoTrabalho.query.options(joinedload(GrupoTrabalho.lojas)).order_by(GrupoTrabalho.nome_grupo).all()
 
     if request.method == 'POST':
         nome_checkpoint = request.form.get('nome_checkpoint')
-        id_atividade = request.form.get('id_atividade', type=int)
         id_grupo_trabalho = request.form.get('id_grupo_trabalho', type=int)
         lojas_selecionadas = request.form.getlist('lojas')  # Captura as lojas selecionadas
         id_planejamento = request.form.get('id_planejamento', type=int)
@@ -64,8 +61,8 @@ def create():
             flash('Selecione pelo menos uma loja.', 'danger')
             return redirect(url_for('checkpoint_atividade.create'))
 
-        if not nome_checkpoint or not id_atividade or not id_grupo_trabalho or not data_ini:
-            flash('Título, atividade, grupo de trabalho e data inicial são obrigatórios.', 'danger')
+        if not nome_checkpoint or not id_grupo_trabalho or not data_ini:
+            flash('Título, grupo de trabalho e data inicial são obrigatórios.', 'danger')
             return redirect(url_for('checkpoint_atividade.create'))
 
         try:
@@ -73,7 +70,6 @@ def create():
             for id_loja in lojas_selecionadas:
                 registro = CheckpointAtividade(
                     nome_checkpoint=nome_checkpoint,
-                    id_atividade=id_atividade,
                     id_loja=int(id_loja),  # Certifique-se de converter para inteiro
                     id_planejamento=id_planejamento,
                     status=status,
@@ -93,7 +89,6 @@ def create():
 
     return render_template(
         'checkpoint_atividade/create.html',
-        atividades=atividades,
         planejamentos=planejamentos,
         grupos_trabalho=grupos_trabalho
     )
@@ -102,7 +97,6 @@ def create():
 @bp.route('/<int:id>/edit')
 def edit(id):
     registro = CheckpointAtividade.query.get_or_404(id)
-    atividades = Atividade.query.order_by(Atividade.titulo).all()
     planejamentos = Planejamento.query.order_by(
     Planejamento.data_ini.desc()
     ).all()
@@ -111,7 +105,6 @@ def edit(id):
     return render_template(
         'checkpoint_atividade/edit.html',
         registro=registro,
-        atividades=atividades,
         planejamentos=planejamentos,
         lojas=lojas
     )
@@ -192,14 +185,13 @@ def api_index():
 def api_create():
     data = request.get_json()
 
-    required = ['nome_checkpoint', 'id_atividade', 'id_planejamento', 'id_loja', 'data_ini']
+    required = ['nome_checkpoint', 'id_planejamento', 'id_loja', 'data_ini']
     if not data or not all(k in data for k in required):
         return jsonify({'error': 'Campos obrigatórios ausentes'}), 400
 
     try:
         registro = CheckpointAtividade(
             nome_checkpoint=data['nome_checkpoint'],
-            id_atividade=data['id_atividade'],
             id_planejamento=data['id_planejamento'],
             id_loja=data['id_loja'],
             status=data.get('status', 'Pendente'),
