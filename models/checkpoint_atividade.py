@@ -26,6 +26,12 @@ class CheckpointAtividade(db.Model):
         nullable=False
     )
 
+    id_planejamento = db.Column(
+        db.Integer,
+        db.ForeignKey('planejamento.id_planejamento'),
+        nullable=False
+    )
+
     # Status da execução
     status = db.Column(
         db.String(50),
@@ -50,15 +56,7 @@ class CheckpointAtividade(db.Model):
     # Relacionamentos
     atividade = db.relationship('Atividade')
     loja = db.relationship('Loja')
-
-    __table_args__ = (
-        db.UniqueConstraint(
-            'nome_checkpoint',
-            'id_atividade',
-            'id_loja',
-            name='uq_checkpoint_nome_atividade_loja'
-        ),
-    )
+    planejamento = db.relationship('Planejamento')
 
     def __repr__(self):
         return (
@@ -105,7 +103,7 @@ class CheckpointAtividade(db.Model):
                 'id': self.loja.id_loja,
                 'nome': self.loja.nome_loja
             } if self.loja else None,
-
+            'id_planejamento': self.id_planejamento,
             'status': self.status,
             'data_ini': self.data_ini.isoformat() if self.data_ini else None,
             'data_fim': self.data_fim.isoformat() if self.data_fim else None,
@@ -116,3 +114,20 @@ class CheckpointAtividade(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
+
+    def atualizar_planejamento_status(self):
+        """
+        Atualiza o status do planejamento relacionado.
+        """
+        if self.planejamento:
+            self.planejamento.atualizar_status()
+            db.session.commit()
+
+    # Sobrescrever o método save para garantir a atualização
+    def save(self):
+        """
+        Salva o checkpoint e atualiza o planejamento relacionado.
+        """
+        db.session.add(self)
+        db.session.commit()
+        self.atualizar_planejamento_status()

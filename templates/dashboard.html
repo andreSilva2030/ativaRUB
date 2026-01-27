@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}AtivaRUB{% endblock %}
+
+{% block content %}
+
+<section id="painel-central" class="container mt-5 mb-5">
+
+    <!-- ================= FILTROS ================= -->
+    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center mb-4 gap-3">
+        <h1 class="me-4">Dashboard</h1>
+
+        <form method="GET" class="d-flex flex-column flex-md-row align-items-center gap-2 w-100">
+
+            <!-- Divisão -->
+            <div class="btn-group w-100" role="group">
+                <button type="submit" name="divisao_id" value=""
+                    class="btn btn-outline-primary {% if not selected_id %}active{% endif %}">
+                    Todas
+                </button>
+
+                {% for d in divisoes %}
+                    <button type="submit"
+                            name="divisao_id"
+                            value="{{ d.id_bandeira_divisao }}"
+                            class="btn btn-outline-primary {% if d.id_bandeira_divisao == selected_id %}active{% endif %}">
+                        {{ d.nome_bandeira }}
+                    </button>
+                {% endfor %}
+            </div>
+
+            <!-- Grupo -->
+            {% if selected_id %}
+            <div class="btn-group ms-3" role="group">
+                <button type="submit" name="grupo_id" value=""
+                    class="btn btn-outline-secondary {% if not selected_group_id %}active{% endif %}">
+                    Todos os Grupos
+                </button>
+
+                {% for g in grupos %}
+                    <button type="submit"
+                            name="grupo_id"
+                            value="{{ g.id_grupo_trabalho }}"
+                            class="btn btn-outline-secondary {% if g.id_grupo_trabalho == selected_group_id %}active{% endif %}">
+                        {{ g.nome_grupo }}
+                    </button>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- manter filtros -->
+            <input type="hidden" name="divisao_id" value="{{ selected_id }}">
+            <input type="hidden" name="grupo_id" value="{{ selected_group_id }}">
+        </form>
+    </div>
+
+    <!-- ================= TABELA: LOJAS ================= -->
+    {% if selected_divisao %}
+    <div class="card mb-5">
+        <div class="card-header">
+            <h2 class="mb-0">Lojas — {{ selected_divisao.nome_bandeira }}</h2>
+        </div>
+
+        <div class="card-body">
+            {% if grupos_loja %}
+            <div class="table-responsive">
+                <table class="table table-striped table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Loja</th>
+                            <th>Grupo</th>
+                            <th>Responsável</th>
+                            <th>Contato</th>
+                            <th class="text-center">Pessoas</th>
+                            <th class="text-center">SKUs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loja in grupos_loja %}
+                        <tr>
+                            <td data-label="Loja">
+                                <strong> <i class="bi bi-shop d-none d-md-inline me-1 text-muted"></i>{{ loja.nome_loja }}</strong>
+                            </td>
+                            <td data-label="Grupo" data-icon="person-gear">{{ loja.nome_grupo }}</td>
+                            <td data-label="Responsável" data-icon="person-up">{{ loja.responsavel_nome }}</td>
+                            <td data-label="Contato" data-icon="phone">{{ loja.responsavel_contato or '—' }}</td>
+                            <td class="text-center" data-label="Pessoas" data-icon="person-check">{{ loja.qtd_pessoas }}</td>
+                            <td class="text-center" data-label="SKUs" data-icon="basket3">
+                                <span class="badge bg-secondary">{{ loja.qtd_sku }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="alert alert-info">
+                    Nenhuma loja vinculada a esta divisão.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</section>
+
+<!-- ================= ATIVIDADES x PLANEJAMENTO ================= -->
+<section id="atividades-planejamento" class="container mb-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Atividades e Planejamento</h2>
+            <small class="text-muted">Visão por Grupo de Trabalho</small>
+        </div>
+
+        <div class="card-body">
+            {% if atividades_planejamento %}
+            <div class="table-responsive">
+                <table class="table table-striped table-sm align-middle fs-6">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Atividade</th>
+                            <th>Descrição</th>
+                            <th>Início Planejado</th>
+                            <th>Fim Planejado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in atividades_planejamento %}
+                        <tr>
+                            <td data-label="Grupo" class="fw-semibold">
+                                {{ item.nome_grupo or '—' }}
+                            </td>
+                            <td data-label="Titulo"><strong>{{ item.titulo }}</strong></td>
+                            <td data-label="Descricao" class="text-muted">{{ item.descricao }}</td>
+                            <td data-label="Data Ini">
+                                {{ item.data_ini.strftime('%d/%m/%Y %H:%M') if item.data_ini else '—' }}
+                            </td>
+                            <td data-label="Data Fim">
+                                {{ item.data_fim.strftime('%d/%m/%Y %H:%M') if item.data_fim else '—' }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="alert alert-info mb-0">
+                    Nenhuma atividade encontrada para os filtros selecionados.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- ================= ACOMPANHAMENTO ================= -->
+<section id="acompanhamento" class="container mt-5 mb-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Acompanhamento — Planejado x Executado</h2>
+            <small class="text-muted">
+                Visão por Grupo, Loja e Atividade
+            </small>
+        </div>
+
+        <div class="card-body">
+            {% if acompanhamento_planejamento %}
+            <div class="table-responsive">
+                <table class="table table-striped table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Loja</th>
+                            <th>Planejamento</th>
+                            <th>Checkpoint</th>
+
+                            <th>Plan. Início</th>
+                            <th>Plan. Fim</th>
+                            <th class="text-center">Previsto</th>
+
+                            <th>Exec. Início</th>
+                            <th>Exec. Fim</th>
+                            <th class="text-center">Executado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in acompanhamento_planejamento %}
+                        <tr>
+                            <td data-label="Grupo Trabalho">
+                                <span class="fw-semibold">
+                                    {{ item.nome_grupo or '—' }}
+                                </span>
+                            </td>
+
+                            <td data-label="Loja">
+                                {{ item.nome_loja }}
+                            </td>
+
+                            <td data-label="Planejamento">
+                                <strong>{{ item.titulo }}</strong>
+                            </td>
+
+                            <td data-label="Checkpoint" class="text-muted">
+                                {{ item.nome_checkpoint }}
+                            </td>
+
+                            <!-- Planejado -->
+                            <td data-label="Plan. Início">
+                                {{ item.plan_data_ini.strftime('%d/%m/%Y %H:%M') if item.plan_data_ini else '—' }}
+                            </td>
+                            <td data-label="Plan. Fim">
+                                {{ item.plan_data_fim.strftime('%d/%m/%Y %H:%M') if item.plan_data_fim else '—' }}
+                            </td>
+                            <td data-label="Previsto" class="text-center">
+                                {{ item.previsto or '—' }}
+                            </td>
+
+                            <!-- Executado -->
+                            <td data-label="Exec. Início">
+                                {{ item.ck_data_ini.strftime('%d/%m/%Y %H:%M') if item.ck_data_ini else '—' }}
+                            </td>
+                            <td data-label="Exec. Fim">
+                                {{ item.ck_data_fim.strftime('%d/%m/%Y %H:%M') if item.ck_data_fim else '—' }}
+                            </td>
+                            <td data-label="Executado" class="text-center">
+                                {{ item.executado or '—' }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="alert alert-info mb-0">
+                    Nenhum acompanhamento encontrado para os filtros selecionados.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

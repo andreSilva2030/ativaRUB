@@ -2,7 +2,7 @@ from database import db
 from datetime import datetime
 
 class GrupoTrabalho(db.Model):
-    __tablename__ = 'grupotrabalho'
+    __tablename__ = 'grupo_trabalho'
     
     id_grupo_trabalho = db.Column(db.Integer, primary_key=True)
     nome_grupo = db.Column(db.String(255), nullable=False)
@@ -19,6 +19,12 @@ class GrupoTrabalho(db.Model):
     # 1:N com Loja
     lojas = db.relationship('Loja', back_populates='grupo_trabalho', lazy=True)
     
+    planejamentos = db.relationship(
+        'Planejamento',
+        back_populates='grupo_trabalho',
+        cascade='all, delete-orphan'
+    )
+
     def __init__(self, nome_grupo, id_responsavel=None):
         self.nome_grupo = nome_grupo
         self.id_responsavel = id_responsavel

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Novo Planejamento</h2>
+
+    <form method="POST" class="mt-3">
+
+        <div class="mb-3">
+            <label for="titulo" class="form-label">
+                Título do Planejamento *
+            </label>
+            <input type="text"
+                   class="form-control"
+                   id="titulo"
+                   name="titulo"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_atividade" class="form-label">
+                Atividade *
+            </label>
+            <select class="form-select"
+                    id="id_atividade"
+                    name="id_atividade"
+                    required>
+                <option value="">Selecione</option>
+                {% for a in atividades %}
+                    <option value="{{ a.id_atividade }}">
+                        {{ a.titulo }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_grupo_trabalho" class="form-label">
+                Grupo de Trabalho *
+            </label>
+            <select class="form-select"
+                    id="id_grupo_trabalho"
+                    name="id_grupo_trabalho"
+                    required>
+                <option value="">Selecione</option>
+                {% for g in grupos_trabalho %}
+                    <option value="{{ g.id_grupo_trabalho }}">
+                        {{ g.nome_grupo }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="data_ini" class="form-label">
+                    Data Início *
+                </label>
+                <input type="datetime-local"
+                       class="form-control"
+                       id="data_ini"
+                       name="data_ini"
+                       required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="data_fim" class="form-label">
+                    Data Fim
+                </label>
+                <input type="datetime-local"
+                       class="form-control"
+                       id="data_fim"
+                       name="data_fim">
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit"
+                    class="btn btn-success">
+                Salvar
+            </button>
+
+            <a href="{{ url_for('planejamento.index') }}"
+               class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -21,13 +21,13 @@ class Loja(db.Model):
     # Foreign Keys
     id_divisao_bandeira = db.Column(
         db.Integer,
-        db.ForeignKey('divisaobandeira.id_bandeira_divisao'),
+        db.ForeignKey('divisao_bandeira.id_bandeira_divisao'),
         nullable=False
     )
 
     id_grupo_trabalho = db.Column(
         db.Integer,
-        db.ForeignKey('grupotrabalho.id_grupo_trabalho')
+        db.ForeignKey('grupo_trabalho.id_grupo_trabalho')
     )
 
     # Relacionamentos

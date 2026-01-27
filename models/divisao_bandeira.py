@@ -2,7 +2,7 @@ from database import db
 from datetime import datetime
 
 class DivisaoBandeira(db.Model):
-    __tablename__ = 'divisaobandeira'
+    __tablename__ = 'divisao_bandeira'
     
     id_bandeira_divisao = db.Column(db.Integer, primary_key=True)
     nome_bandeira = db.Column(db.String(255), nullable=False)

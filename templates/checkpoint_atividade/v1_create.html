@@ -2,113 +2,93 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h3 class="mb-4">Criar Checkpoint de Atividade</h3>
+    <h2 class="mb-4">Criar Checkpoint de Atividade</h2>
 
-  <form method="POST">
-
-    <!-- Card: Informações Básicas -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">Informações Básicas</div>
-      <div class="card-body">
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">Título *</label>
-            <input type="text" class="form-control" name="nome_checkpoint" required>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">Atividade *</label>
-            <select class="form-select" name="id_atividade" required>
-              <option value="">Selecione</option>
-              {% for atividade in atividades %}
-                <option value="{{ atividade.id_atividade }}">{{ atividade.titulo }}</option>
-              {% endfor %}
-            </select>
-          </div>
+    <form method="POST">
+        <!-- Título -->
+        <div class="mb-3">
+            <label for="nome_checkpoint" class="form-label">Título *</label>
+            <input type="text" class="form-control" id="nome_checkpoint" name="nome_checkpoint" required>
         </div>
 
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Status</label>
-            <select class="form-select" name="status">
-              <option>Pendente</option>
-              <option>Em andamento</option>
-              <option>Concluído</option>
+        <!-- Atividade -->
+        <div class="mb-3">
+            <label for="id_atividade" class="form-label">Atividade *</label>
+            <select class="form-select" id="id_atividade" name="id_atividade" required>
+                <option value="">Selecione uma atividade</option>
+                {% for atividade in atividades %}
+                    <option value="{{ atividade.id_atividade }}">{{ atividade.titulo }}</option>
+                {% endfor %}
             </select>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Data Inicial *</label>
-            <input type="datetime-local" class="form-control" name="data_ini" required>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Data Final</label>
-            <input type="datetime-local" class="form-control" name="data_fim">
-          </div>
         </div>
 
-      </div>
-    </div>
+        <!-- Status -->
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status">
+                <option value="Pendente">Pendente</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Concluído">Concluído</option>
+            </select>
+        </div>
 
-    <!-- Card: Planejamento -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">Planejamento</div>
-      <div class="card-body">
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">Grupo de Trabalho *</label>
+        <!-- Grupo de Trabalho -->
+        <div class="mb-3">
+            <label for="id_grupo_trabalho" class="form-label">Grupo de Trabalho *</label>
             <select class="form-select" id="id_grupo_trabalho" name="id_grupo_trabalho" required>
-              <option value="">Selecione</option>
-              {% for grupo in grupos_trabalho %}
-                <option value="{{ grupo.id_grupo_trabalho }}">{{ grupo.nome_grupo }}</option>
-              {% endfor %}
+                <option value="">Selecione um grupo de trabalho</option>
+                {% for grupo in grupos_trabalho %}
+                    <option value="{{ grupo.id_grupo_trabalho }}">{{ grupo.nome_grupo }}</option>
+                {% endfor %}
             </select>
-          </div>
+        </div>
 
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">Planejamento *</label>
+        <!-- Planejamento -->
+        <div class="mb-3">
+            <label for="id_planejamento" class="form-label">Planejamento *</label>
             <select class="form-select" id="id_planejamento" name="id_planejamento" required>
-              <option value="">Selecione</option>
-              {% for planejamento in planejamentos %}
-                <option value="{{ planejamento.id_planejamento }}" data-grupo="{{ planejamento.grupo_trabalho.id_grupo_trabalho }}">
-                  {{ planejamento.titulo }}
-                </option>
-              {% endfor %}
+                <option value="">Selecione um planejamento</option>
+                {% for planejamento in planejamentos %}
+                    <option value="{{ planejamento.id_planejamento }}" data-grupo="{{ planejamento.grupo_trabalho.id_grupo_trabalho }}">
+                        {{ planejamento.titulo }} - {{ planejamento.data_ini.strftime('%Y-%m-%dT%H:%M') }} a {{ planejamento.data_fim.strftime('%Y-%m-%dT%H:%M') if planejamento.data_fim else 'Sem data final' }}
+                    </option>
+                {% endfor %}
             </select>
-          </div>
         </div>
 
-      </div>
-    </div>
-
-    <!-- Lojas -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">Lojas Associadas</div>
-      <div class="card-body">
-        <div id="lojas-container" class="lojas-box">
-          <p class="text-muted">Selecione um grupo de trabalho.</p>
+        <!-- Lojas Associadas -->
+        <div class="mb-3">
+            <label class="form-label">Lojas Associadas</label>
+            <div id="lojas-container">
+                <p class="text-muted">Selecione um grupo de trabalho para ver as lojas associadas.</p>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Observação -->
-    <div class="mb-3">
-      <label class="form-label">Observação</label>
-      <textarea class="form-control" rows="3" name="observacao"></textarea>
-    </div>
+        <!-- Data Inicial -->
+        <div class="mb-3">
+            <label for="data_ini" class="form-label">Data Inicial *</label>
+            <input type="datetime-local" class="form-control" id="data_ini" name="data_ini" required>
+        </div>
 
-    <!-- Ações -->
-    <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-primary">Salvar</button>
-      <a href="{{ url_for('checkpoint_atividade.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-    </div>
+        <!-- Data Final -->
+        <div class="mb-3">
+            <label for="data_fim" class="form-label">Data Final</label>
+            <input type="datetime-local" class="form-control" id="data_fim" name="data_fim">
+        </div>
 
-  </form>
+        <!-- Observação -->
+        <div class="mb-3">
+            <label for="observacao" class="form-label">Observação</label>
+            <textarea class="form-control" id="observacao" name="observacao" rows="3"></textarea>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{{ url_for('checkpoint_atividade.index') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
 </div>
-
 
 <script>
     // Atualizar as lojas associadas ao grupo de trabalho selecionado

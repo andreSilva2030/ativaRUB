@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from config import Config
 from database import db, migrate
-from controllers import divisao_bandeira_controller, loja_controller, responsavel_controller, checkpoint_atividade_controller, atividade_controller
+from controllers import divisao_bandeira_controller, loja_controller, responsavel_controller, planejamento_controller, checkpoint_atividade_controller, atividade_controller, gestao_controller
 from controllers.grupo_trabalho_controller import bp as grupo_trabalho_bp
 
 # Carregar variáveis de ambiente
@@ -24,6 +24,8 @@ def create_app():
     app.register_blueprint(grupo_trabalho_bp)
     app.register_blueprint(atividade_controller.bp)
     app.register_blueprint(checkpoint_atividade_controller.bp)
+    app.register_blueprint(planejamento_controller.bp)
+    app.register_blueprint(gestao_controller.bp)
     
     # Rota principal
     @app.route('/')

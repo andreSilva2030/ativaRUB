@@ -28,12 +28,7 @@
                 <td>{{ grupo.id_grupo_trabalho }}</td>
                 <td>{{ grupo.nome_grupo }}</td>
                 <td>{{ grupo.total_pessoas }}</td>
-                    {% if grupo.responsavel_nome %}
-                        {{ grupo.responsavel_nome }}
-                    {% else %}
-                        Não atribuído
-                    {% endif %}
-                </td>
+                <td>{{ grupo.responsavel_nome or 'Não atribuído' }}</td>
                 <td>{{ grupo.total_lojas }}</td>
                 <td>
                     <a href="/grupos_trabalho/{{ grupo.id_grupo_trabalho }}/editar" class="btn btn-warning btn-sm">Editar</a>
@@ -46,6 +41,34 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Opcional: exibir detalhes das lojas em cada grupo -->
+    <h3 class="mt-5">Detalhes das Lojas por Grupo</h3>
+    {% for grupo in grupos_trabalho %}
+        <h5>{{ grupo.nome_grupo }} ({{ grupo.total_lojas }} lojas)</h5>
+        {% if grupo.lojas_info %}
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome da Loja</th>
+                    <th>Qtd. Pessoas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loja in grupo.lojas_info %}
+                <tr>
+                    <td>{{ loja.id }}</td>
+                    <td>{{ loja.nome }}</td>
+                    <td>{{ loja.qtd_pessoas }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Sem lojas cadastradas.</p>
+        {% endif %}
+    {% endfor %}
     {% else %}
     <div class="alert alert-info" role="alert">
         Nenhum grupo de trabalho encontrado.

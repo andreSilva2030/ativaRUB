@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
-from models import DivisaoBandeira
+from models import DivisaoBandeira, GrupoTrabalho
 from database import db
 
 bp = Blueprint('divisao_bandeira', __name__, url_prefix='/divisao_bandeira')

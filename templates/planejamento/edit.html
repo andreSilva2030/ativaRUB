@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Planejamento{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Editar Planejamento</h1>
+    <form action="{{ url_for('planejamento.update', id=planejamento.id_planejamento) }}" method="POST">
+        <div class="form-group">
+            <label for="titulo">Título</label>
+            <input 
+                type="text" 
+                id="titulo" 
+                name="titulo" 
+                class="form-control" 
+                value="{{ planejamento.titulo or '' }}" 
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_atividade">Atividade</label>
+            <select id="id_atividade" name="id_atividade" class="form-control" required>
+                <option value="" disabled {% if not planejamento.id_atividade %}selected{% endif %}>Selecione uma atividade</option>
+                {% for atividade in atividades %}
+                    <option value="{{ atividade.id }}" 
+                        {% if atividade.id == planejamento.id_atividade %}selected{% endif %}>
+                        {{ atividade.titulo }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="id_grupo_trabalho">Grupo de Trabalho</label>
+            <select id="id_grupo_trabalho" name="id_grupo_trabalho" class="form-control" required>
+                <option value="" disabled {% if not planejamento.id_grupo_trabalho %}selected{% endif %}>Selecione um grupo de trabalho</option>
+                {% for grupo in grupos_trabalho %}
+                    <option value="{{ grupo.id }}" 
+                        {% if grupo.id == planejamento.id_grupo_trabalho %}selected{% endif %}>
+                        {{ grupo.nome_grupo }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="data_ini">Data Inicial</label>
+            <input 
+                type="datetime-local" 
+                id="data_ini" 
+                name="data_ini" 
+                class="form-control" 
+                value="{{ planejamento.data_ini.strftime('%Y-%m-%dT%H:%M') if planejamento.data_ini else '' }}" 
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="data_fim">Data Final</label>
+            <input 
+                type="datetime-local" 
+                id="data_fim" 
+                name="data_fim" 
+                class="form-control" 
+                value="{{ planejamento.data_fim.strftime('%Y-%m-%dT%H:%M') if planejamento.data_fim else '' }}">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{{ url_for('planejamento.index') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

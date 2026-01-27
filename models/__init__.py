@@ -9,3 +9,5 @@ from .atividade import Atividade
 
 # Tabela fato (Checkpoint x Atividade x Loja)
 from .checkpoint_atividade import CheckpointAtividade
+
+from .planejamento import Planejamento

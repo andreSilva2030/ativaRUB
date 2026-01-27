@@ -101,6 +101,47 @@ def show(id):
     loja = Loja.query.get_or_404(id)
     return render_template('lojas/show.html', loja=loja)
 
+@bp.route('/dashboard')
+def dashboard():
+    # Todas as divisões e grupos (para o caso de não haver seleção)
+    divisoes = DivisaoBandeira.query.order_by(DivisaoBandeira.nome_bandeira).all()
+    grupos = GrupoTrabalho.query.order_by(GrupoTrabalho.nome_grupo).all()
+
+    selected_id = request.args.get('divisao_id', type=int)
+    selected_group_id = request.args.get('grupo_id', type=int)
+
+    lojas = []
+    selected_divisao = None
+
+    if selected_id:
+        # Consulta filtrada no banco
+        query = Loja.query.filter_by(id_divisao_bandeira=selected_id)
+        if selected_group_id:
+            query = query.filter_by(id_grupo_trabalho=selected_group_id)
+        lojas = query.order_by(Loja.nome_loja).all()
+
+        selected_divisao = DivisaoBandeira.query.get(selected_id)
+
+        # **Novo**: grupos que têm pelo menos uma loja na divisão selecionada
+        grupos = (
+            GrupoTrabalho.query
+            .join(Loja)
+            .filter(Loja.id_divisao_bandeira == selected_id)
+            .distinct()
+            .order_by(GrupoTrabalho.nome_grupo)
+            .all()
+        )
+
+    return render_template(
+        'dashboard.html',
+        divisoes=divisoes,
+        grupos=grupos,
+        selected_id=selected_id,
+        selected_group_id=selected_group_id,
+        selected_divisao=selected_divisao,
+        lojas=lojas
+    )
+
 
 # ========== ROTAS API ==========
 
@@ -175,3 +216,17 @@ def api_delete(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+
+@bp.route('/api/lojas', methods=['GET'])
+def api_lojas_by_grupo():
+    grupo_trabalho_id = request.args.get('grupo_trabalho_id', type=int)
+
+    if not grupo_trabalho_id:
+        return jsonify({'error': 'ID do grupo de trabalho não fornecido'}), 400
+
+    # Filtrar lojas pelo grupo de trabalho
+    lojas = Loja.query.filter_by(id_grupo_trabalho=grupo_trabalho_id).all()
+
+    # Retornar as lojas como JSON
+    return jsonify([loja.to_dict() for loja in lojas])

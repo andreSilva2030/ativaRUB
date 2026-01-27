@@ -1,81 +1,183 @@
-/* Paleta de cores */
-:root {
-    --text-color: #0f0f1f; /* Text */
-    --background-color: #ffffff; /* Background */
-    --primary-color: #5b2c6f; /* Primary */
-    --secondary-color: #b3a2c7; /* Secondary */
-    --accent-color: #4dc3d9; /* Accent */
-}
+    :root {
+      --royal-orchid: #9206B1;
+      --mauve-magic: #BC6BFF;
+      --indigo-ink: #331B6A;
+      --pearl-aqua: #ABDDDA;
+      --dark-amethyst: #3F0049;
+    }
 
-/* Corpo */
-body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: Arial, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+    .navbar {
+      background-color: var(--indigo-ink) !important;
+      border-bottom: 2px solid var(--mauve-magic);
+    }
 
-/* Tabela */
-.table th {
-    font-weight: 600;
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+    .navbar-brand,
+    .navbar-nav .nav-link {
+      color: white !important;
+      font-weight: 500;
+    }
 
-.table th:hover {
-    background-color: var(--accent-color);
-    color: var(--text-color);
-}
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: var(--mauve-magic) !important;
+    }
 
-/* Cartões */
-.card {
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    border: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .header-bg {
+      background-color: var(--royal-orchid);
+      color: white;
+    }
 
-.card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
-}
+    .card {
+      border: 1px solid var(--dark-amethyst);
+      border-radius: 0.75rem;
+      transition: transform 0.2s ease;
+    }
 
-/* Cabeçalho do cartão */
-.card-header {
-    background-color: var(--secondary-color);
-    border-bottom: 1px solid var(--accent-color);
-    transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
-}
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(63, 0, 73, 0.2);
+    }
 
-.card-header:hover {
-    background-color: var(--accent-color);
-    border-bottom-color: var(--primary-color);
-}
+    .card-title {
+      color: var(--dark-amethyst);
+      font-weight: 600;
+    }
 
-/* Botões */
-.btn-group-sm .btn {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    border: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
+    .card-subtitle {
+      color: var(--indigo-ink);
+      font-size: 0.85rem;
+    }
 
-.btn-group-sm .btn:hover {
-    background-color: var(--accent-color);
-    transform: scale(1.1);
-}
+    .card-link {
+      color: var(--mauve-magic);
+      font-weight: 500;
+    }
 
-/* Badges */
-.badge {
-    font-size: 0.85em;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+    .card-link:hover {
+      color: var(--dark-amethyst);
+      text-decoration: underline;
+    }
 
-.badge:hover {
-    background-color: var(--accent-color);
-    color: var(--background-color);
-}
+    .table thead th {
+      background-color: var(--indigo-ink);
+      color: white;
+      font-weight: 600;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: var(--pearl-aqua);
+    }
+
+    .table tbody tr:hover {
+      background-color: var(--mauve-magic);
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: var(--mauve-magic);
+      border-color: var(--mauve-magic);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--dark-amethyst);
+      border-color: var(--dark-amethyst);
+    }
+
+@media (max-width: 767.98px) {
+    /* Esconde o cabeçalho da tabela */
+    .table-responsive thead {
+        display: none;
+    }
+
+    /* Torna cada linha uma "cartão" vertical */
+    .table-responsive tbody,
+    .table-responsive tr,
+    .table-responsive td {
+        display: block;
+        width: 100%;
+    }
+
+    .table-responsive td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border: none;
+        border-bottom: 1px solid #eee;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+    }
+
+    /* Estilo do rótulo com ícone */
+    .table-responsive td:before {
+        content: "";
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45%;
+        white-space: nowrap;
+        font-weight: 600;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Ícone (usando ::before do ::before — sim, é possível!) */
+    .table-responsive td:before {
+        /* Vamos usar o caractere do ícone via font-family */
+    }
+
+    /* Agora usamos o atributo data-icon para definir o ícone */
+    .table-responsive td[data-icon="shop"]:before {
+        content: "\f4a3"; /* Código Unicode do ícone 'shop' */
+    }
+    .table-responsive td[data-icon="people"]:before {
+        content: "\f502";
+    }
+    .table-responsive td[data-icon="person"]:before {
+        content: "\f4fd";
+    }
+    .table-responsive td[data-icon="telephone"]:before {
+        content: "\f5d1";
+    }
+    .table-responsive td[data-icon="person-fill"]:before {
+        content: "\f4fe";
+    }
+    .table-responsive td[data-icon="tag-fill"]:before {
+        content: "\f5c4";
+    }
+
+    /* Aplica a fonte do Bootstrap Icons */
+    .table-responsive td:before {
+        font-family: "bootstrap-icons" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1.1rem;
+        color: #495057;
+    }
+
+    /* Sobrepõe o texto do label após o ícone */
+    .table-responsive td:after {
+        content: attr(data-label);
+        position: absolute;
+        left: 2.5rem; /* Ajuste conforme o tamanho do ícone */
+        top: 50%;
+        transform: translateY(-50%);
+        font-weight: 600;
+        color: #212529;
+        font-size: 0.95rem;
+    }
+
+    .table-responsive tr {
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Remove borda do último item */
+    .table-responsive tr:last-child {
+        border-bottom: none;
+    }
+  }
